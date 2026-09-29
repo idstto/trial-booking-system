@@ -53,7 +53,7 @@ export async function seedDatabase(databaseUrl: string): Promise<void> {
         VALUES
           ('40000000-0000-4000-8000-000000000001', ${s3}, ${seedIds.ordinaryClass}, 'confirmed', 'seed-ordinary-confirmed', 'seed', now()),
           ('40000000-0000-4000-8000-000000000002', ${s2}, ${seedIds.ordinaryClass}, 'payment_failed', 'seed-payment-failed', 'seed', NULL),
-          ('40000000-0000-4000-8000-000000000003', ${s1}, ${seedIds.ordinaryClass}, 'pending_payment', 'seed-duplicate-pending', 'seed', NULL),
+          ('40000000-0000-4000-8000-000000000003', ${s6}, ${seedIds.ordinaryClass}, 'pending_payment', 'seed-duplicate-pending', 'seed', NULL),
           ('40000000-0000-4000-8000-000000000004', ${s3}, ${seedIds.lastSeatClass}, 'confirmed', 'seed-last-seat-1', 'seed', now()),
           ('40000000-0000-4000-8000-000000000005', ${s4}, ${seedIds.lastSeatClass}, 'confirmed', 'seed-last-seat-2', 'seed', now()),
           ('40000000-0000-4000-8000-000000000006', ${s5}, ${seedIds.lastSeatClass}, 'confirmed', 'seed-last-seat-3', 'seed', now()),

@@ -109,8 +109,8 @@ connections, replay both command types, and verify exact stored outcomes.
 
 **Purpose**: Demonstrate the verified backend and prepare a public-repository-ready submission.
 
-- [ ] T033 Write failing component tests for selection, booking, payment controls, visible status, and roster refresh in `tests/unit/booking-flow.test.tsx`
-- [ ] T034 Implement the accessible server-led booking interface in `src/app/page.tsx`, `src/app/booking-flow.tsx`, and `src/app/globals.css`
+- [X] T033 Write failing component tests for selection, booking, payment controls, visible status, and roster refresh in `tests/unit/booking-flow.test.tsx`
+- [X] T034 Implement the accessible server-led booking interface in `src/app/page.tsx`, `src/app/booking-flow.tsx`, and `src/app/globals.css`
 - [ ] T035 [P] Add scripts for migrate, seed, unit, integration, contract, and 100-run race verification in `package.json`
 - [ ] T036 [P] Write accurate setup, architecture, transaction, tradeoff, monitoring, and demo guidance in `README.md`
 - [ ] T037 [P] Document AI acceleration, rejected suggestions, corrections, and verification in `AI_USAGE.md`
