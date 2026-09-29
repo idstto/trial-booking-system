@@ -55,7 +55,7 @@ export interface BookingRepository {
   lockBookingById(bookingId: string, parentId: string): Promise<BookingRecord | null>;
   findBookingByRequestKey(requestKey: string): Promise<(BookingRecord & { requestFingerprint: string }) | null>;
   findActiveBooking(studentId: string, trialClassId: string): Promise<BookingRecord | null>;
-  createPendingBooking(input: CreatePendingBookingRecord): Promise<BookingRecord>;
+  createPendingBooking(input: CreatePendingBookingRecord): Promise<BookingRecord | null>;
   findPaymentAttempt(idempotencyKey: string): Promise<StoredPaymentAttempt | null>;
   lockTrialClass(trialClassId: string): Promise<{ id: string; capacity: number } | null>;
   countConfirmed(trialClassId: string): Promise<number>;

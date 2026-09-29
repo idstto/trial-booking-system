@@ -72,14 +72,14 @@ connections, replay both command types, and verify exact stored outcomes.
 
 ### Tests for User Story 2
 
-- [ ] T024 [P] [US2] Write failing integration tests for booking replay, payment replay, conflicting payload reuse, and concurrent duplicate booking in `tests/integration/idempotency.test.ts`
-- [ ] T025 [P] [US2] Write the failing two-connection final-seat barrier test and independent-class concurrency test in `tests/integration/last-seat-race.test.ts`
+- [X] T024 [P] [US2] Write failing integration tests for booking replay, payment replay, conflicting payload reuse, and concurrent duplicate booking in `tests/integration/idempotency.test.ts`
+- [X] T025 [P] [US2] Write the failing two-connection final-seat barrier test and independent-class concurrency test in `tests/integration/last-seat-race.test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T026 [US2] Implement deterministic command fingerprints and exact replay/conflict rules in `src/application/idempotency.ts` and `src/application/booking-service.ts`
-- [ ] T027 [US2] Implement the booking-then-class lock protocol and confirmed count under lock in `src/infrastructure/db/repositories.ts`
-- [ ] T028 [US2] Map duplicate, idempotency, invalid-transition, and capacity outcomes to stable HTTP responses in `src/lib/http.ts`
+- [X] T026 [US2] Implement deterministic command fingerprints and exact replay/conflict rules in `src/application/idempotency.ts` and `src/application/booking-service.ts`
+- [X] T027 [US2] Implement the booking-then-class lock protocol and confirmed count under lock in `src/infrastructure/db/repositories.ts`
+- [X] T028 [US2] Map duplicate, idempotency, invalid-transition, and capacity outcomes to stable HTTP responses in `src/lib/http.ts`
 
 **Checkpoint**: The race test passes 100 repetitions with one winner and occupancy exactly at capacity.
 

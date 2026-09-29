@@ -84,15 +84,16 @@ export class PostgresBookingRepository implements BookingRepository {
     return row ?? null;
   }
 
-  async createPendingBooking(input: CreatePendingBookingRecord): Promise<BookingRecord> {
+  async createPendingBooking(input: CreatePendingBookingRecord): Promise<BookingRecord | null> {
     const [row] = await this.sql<BookingRow[]>`
       INSERT INTO bookings
         (student_id, trial_class_id, status, request_key, request_fingerprint)
       VALUES
         (${input.studentId}, ${input.trialClassId}, 'pending_payment', ${input.requestKey}, ${input.requestFingerprint})
+      ON CONFLICT DO NOTHING
       RETURNING *
     `;
-    return row!;
+    return row ?? null;
   }
 
   async findPaymentAttempt(idempotencyKey: string): Promise<StoredPaymentAttempt | null> {

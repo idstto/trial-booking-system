@@ -39,6 +39,7 @@ describe("PostgresBookingRepository", () => {
       requestKey: "repository-create-key",
       requestFingerprint: "fingerprint",
     });
+    if (!booking) throw new Error("Expected repository to create a booking");
 
     await repository.createPaymentAttempt({
       bookingId: booking.id,

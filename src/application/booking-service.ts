@@ -57,6 +57,16 @@ export class BookingService {
     });
 
     return this.unitOfWork.run(async (repository) => {
+      const replay = await repository.findBookingByRequestKey(command.requestKey);
+      if (replay) {
+        if (replay.requestFingerprint !== fingerprint) {
+          throw new DomainError(
+            "IDEMPOTENCY_CONFLICT",
+            "Idempotency key was already used with a different booking payload",
+          );
+        }
+        return replay;
+      }
       if (!(await repository.studentBelongsToParent(command.studentId, command.parentId))) {
         throw new DomainError("STUDENT_NOT_FOUND", "Student was not found");
       }
@@ -64,22 +74,37 @@ export class BookingService {
         throw new DomainError("CLASS_NOT_FOUND", "Trial class was not found");
       }
 
-      try {
-        return await repository.createPendingBooking({
-          studentId: command.studentId,
-          trialClassId: command.trialClassId,
-          requestKey: command.requestKey,
-          requestFingerprint: fingerprint,
-        });
-      } catch (error) {
-        if (isPostgresUniqueViolation(error)) {
+      const active = await repository.findActiveBooking(command.studentId, command.trialClassId);
+      if (active) {
+        throw new DomainError(
+          "DUPLICATE_ACTIVE_BOOKING",
+          "This child already has an active booking for the class",
+        );
+      }
+
+      const created = await repository.createPendingBooking({
+        studentId: command.studentId,
+        trialClassId: command.trialClassId,
+        requestKey: command.requestKey,
+        requestFingerprint: fingerprint,
+      });
+      if (created) return created;
+
+      const racedReplay = await repository.findBookingByRequestKey(command.requestKey);
+      if (racedReplay) {
+        if (racedReplay.requestFingerprint !== fingerprint) {
           throw new DomainError(
-            "DUPLICATE_ACTIVE_BOOKING",
-            "This child already has an active booking for the class",
+            "IDEMPOTENCY_CONFLICT",
+            "Idempotency key was concurrently used with a different booking payload",
           );
         }
-        throw error;
+        return racedReplay;
       }
+
+      throw new DomainError(
+        "DUPLICATE_ACTIVE_BOOKING",
+        "This child already has an active booking for the class",
+      );
     });
   }
 
@@ -92,6 +117,16 @@ export class BookingService {
     return this.unitOfWork.run(async (repository) => {
       const booking = await repository.lockBookingById(command.bookingId, command.parentId);
       if (!booking) throw new DomainError("BOOKING_NOT_FOUND", "Booking was not found");
+      const replay = await repository.findPaymentAttempt(command.idempotencyKey);
+      if (replay) {
+        if (replay.bookingId !== booking.id || replay.requestFingerprint !== fingerprint) {
+          throw new DomainError(
+            "IDEMPOTENCY_CONFLICT",
+            "Idempotency key was already used with a different payment payload",
+          );
+        }
+        return booking;
+      }
       if (!canApplyPaymentResult(booking.status)) {
         throw new DomainError(
           "INVALID_BOOKING_TRANSITION",
@@ -120,8 +155,4 @@ export class BookingService {
       return repository.updateBookingStatus(booking.id, outcome);
     });
   }
-}
-
-function isPostgresUniqueViolation(error: unknown): boolean {
-  return typeof error === "object" && error !== null && "code" in error && error.code === "23505";
 }
