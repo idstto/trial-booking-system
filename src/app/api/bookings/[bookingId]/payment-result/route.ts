@@ -5,7 +5,7 @@ import { getEnvironment } from "@/lib/env";
 import { dataResponse, getIdempotencyKey, handleRoute, parseJson } from "@/lib/http";
 
 const bookingIdSchema = z.string().uuid();
-const paymentResultSchema = z.object({ result: z.enum(["succeeded", "failed"]) });
+const paymentResultSchema = z.object({ result: z.enum(["succeeded", "failed"]) }).strict();
 
 export async function POST(
   request: Request,

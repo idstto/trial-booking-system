@@ -7,7 +7,7 @@ import { dataResponse, getIdempotencyKey, handleRoute, parseJson } from "@/lib/h
 const createBookingSchema = z.object({
   studentId: z.string().uuid(),
   trialClassId: z.string().uuid(),
-});
+}).strict();
 
 export async function POST(request: Request): Promise<Response> {
   return handleRoute(async (requestId) => {
