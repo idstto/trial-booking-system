@@ -6,16 +6,17 @@
 
 ## Automated gates
 
-| Gate                  | Result | Evidence                                                                       |
-| --------------------- | ------ | ------------------------------------------------------------------------------ |
-| Formatting            | PASS   | `pnpm format:check` — all matched files use Prettier style                     |
-| Lint                  | PASS   | `pnpm lint` — zero warnings/errors                                             |
-| Type safety           | PASS   | `pnpm typecheck` — zero TypeScript errors                                      |
-| Full suite            | PASS   | `pnpm test` — 9 files, 32 tests passed                                         |
-| Final-seat repetition | PASS   | `pnpm test:race` — 100 two-connection races plus independent-class case passed |
-| Production build      | PASS   | `pnpm build` — page and all six API routes compiled                            |
-| Migration replay      | PASS   | `pnpm db:migrate` — completed against an already-migrated database             |
-| Synthetic seed        | PASS   | `pnpm db:seed` — deterministic dataset loaded                                  |
+| Gate                  | Result | Evidence                                                                                   |
+| --------------------- | ------ | ------------------------------------------------------------------------------------------ |
+| Formatting            | PASS   | `pnpm format:check` — all matched files use Prettier style                                 |
+| Lint                  | PASS   | `pnpm lint` — zero warnings/errors                                                         |
+| Type safety           | PASS   | `pnpm typecheck` — zero TypeScript errors                                                  |
+| Full suite            | PASS   | `pnpm test` — 9 files, 32 tests passed                                                     |
+| Final-seat repetition | PASS   | `pnpm test:race` — 100 two-connection races plus independent-class case passed             |
+| Browser walkthrough   | PASS   | `pnpm test:e2e:walkthrough` — Chromium success, failure, roster, and duplicate flow passed |
+| Production build      | PASS   | `pnpm build` — page and all six API routes compiled                                        |
+| Migration replay      | PASS   | `pnpm db:migrate` — completed against an already-migrated database                         |
+| Synthetic seed        | PASS   | `pnpm db:seed` — deterministic dataset loaded                                              |
 
 ## Acceptance coverage
 

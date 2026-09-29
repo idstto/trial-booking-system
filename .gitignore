@@ -1,6 +1,11 @@
 node_modules/
 .next/
 coverage/
+playwright-report/
+test-results/
+artifacts/walkthrough/screenshots/
+artifacts/walkthrough/video/
+artifacts/walkthrough/transcript.md
 dist/
 *.log
 .env

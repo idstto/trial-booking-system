@@ -42,6 +42,20 @@ $env:DATABASE_URL='postgresql://postgres:postgres@localhost:5432/trial_booking_t
 pnpm db:migrate
 ```
 
+### Browser walkthrough
+
+Install the Playwright Chromium runtime once, then run the deterministic walkthrough:
+
+```powershell
+pnpm exec playwright install chromium
+pnpm test:e2e:walkthrough
+```
+
+The walkthrough migrates and reseeds the database configured by `DATABASE_URL`, starts the application,
+and verifies successful payment, roster refresh, failed payment, and duplicate protection in a real
+browser. It writes screenshots, a WebM recording, and the optional narration transcript under
+`artifacts/walkthrough/`. These generated walkthrough artifacts are intentionally ignored by Git.
+
 ## What was built
 
 - Parent flow: list children and trial classes, create a pending booking, simulate payment, and show
