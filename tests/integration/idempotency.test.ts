@@ -121,9 +121,7 @@ describe("command idempotency", () => {
     const [storedBooking] = await sql<{ status: string }[]>`
       SELECT status FROM bookings WHERE id = ${booking.id}
     `;
-    const attempts = await sql<
-      { bookingId: string; result: string; bookingStatus: string }[]
-    >`
+    const attempts = await sql<{ bookingId: string; result: string; bookingStatus: string }[]>`
       SELECT booking_id, result, booking_status FROM payment_attempts
       WHERE idempotency_key = 'payment-conflict-key'
     `;

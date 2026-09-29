@@ -81,9 +81,7 @@ describe("BookingService", () => {
       SELECT count(*)::int AS count FROM bookings
       WHERE trial_class_id = ${fixture.fullClassId} AND status = 'confirmed'
     `;
-    const [attempt] = await sql<
-      { result: string; bookingStatus: string; bookingId: string }[]
-    >`
+    const [attempt] = await sql<{ result: string; bookingStatus: string; bookingId: string }[]>`
       SELECT result, booking_status, booking_id FROM payment_attempts
       WHERE idempotency_key = 'service-full-payment'
     `;

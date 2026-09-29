@@ -4,10 +4,10 @@ import { getBookingService } from "@/application/composition";
 import { getEnvironment } from "@/lib/env";
 import { dataResponse, getIdempotencyKey, handleRoute, parseJson } from "@/lib/http";
 
-const createBookingSchema = z.object({
+const createBookingSchema = z.strictObject({
   studentId: z.string().uuid(),
   trialClassId: z.string().uuid(),
-}).strict();
+});
 
 export async function POST(request: Request): Promise<Response> {
   return handleRoute(async (requestId) => {
