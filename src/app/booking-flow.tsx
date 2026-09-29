@@ -116,7 +116,11 @@ export function BookingFlow() {
         <h2 id="booking-heading">Choose a child and trial class</h2>
 
         <label htmlFor="student">Child</label>
-        <select id="student" value={studentId} onChange={(event) => setStudentId(event.target.value)}>
+        <select
+          id="student"
+          value={studentId}
+          onChange={(event) => setStudentId(event.target.value)}
+        >
           {students.map((student) => (
             <option key={student.id} value={student.id}>
               {student.name}
@@ -144,7 +148,8 @@ export function BookingFlow() {
           <div className="availability">
             <strong>{selectedClass.availableSeats} seats available</strong>
             <span>
-              {new Date(selectedClass.startsAt).toLocaleString()} · capacity {selectedClass.capacity}
+              {new Date(selectedClass.startsAt).toLocaleString()} · capacity{" "}
+              {selectedClass.capacity}
             </span>
             <small>Availability is confirmed only after payment simulation.</small>
           </div>
@@ -163,7 +168,11 @@ export function BookingFlow() {
                 <button disabled={busy} onClick={() => applyPayment("succeeded")}>
                   Simulate successful payment
                 </button>
-                <button className="secondary" disabled={busy} onClick={() => applyPayment("failed")}>
+                <button
+                  className="secondary"
+                  disabled={busy}
+                  onClick={() => applyPayment("failed")}
+                >
                   Simulate failed payment
                 </button>
               </div>

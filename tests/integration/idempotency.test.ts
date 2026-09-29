@@ -50,7 +50,9 @@ describe("command idempotency", () => {
         trialClassId: fixture.trialClassId,
         requestKey: "create-conflict-key",
       }),
-    ).rejects.toEqual(expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }));
+    ).rejects.toEqual(
+      expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }),
+    );
   });
 
   it("returns the same terminal outcome for an exact payment replay", async () => {
@@ -79,7 +81,10 @@ describe("command idempotency", () => {
 
   it("rejects payment key reuse with a different result", async () => {
     const fixture = await createBaseFixture(sql);
-    const booking = await service.createBooking({ ...fixture, requestKey: "payment-conflict-create" });
+    const booking = await service.createBooking({
+      ...fixture,
+      requestKey: "payment-conflict-create",
+    });
     await service.applyPaymentResult({
       parentId: fixture.parentId,
       bookingId: booking.id,
@@ -94,7 +99,9 @@ describe("command idempotency", () => {
         idempotencyKey: "payment-conflict-key",
         result: "succeeded",
       }),
-    ).rejects.toEqual(expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }));
+    ).rejects.toEqual(
+      expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }),
+    );
   });
 
   it("allows only one concurrent active booking", async () => {

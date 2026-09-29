@@ -34,4 +34,3 @@
 - Validated against the approved product requirements and take-home constraints on 2026-09-29.
 - TDD and SOLID are governance and implementation constraints, so they appear in the constitution and
   plan rather than as business behavior in this specification.
-

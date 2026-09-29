@@ -19,7 +19,7 @@
     "test:unit": "vitest run tests/unit",
     "test:contract": "vitest run tests/contract",
     "test:integration": "vitest run tests/integration",
-    "test:race": "vitest run tests/integration/last-seat-race.test.ts",
+    "test:race": "cross-env RACE_REPETITIONS=100 vitest run tests/integration/last-seat-race.test.ts",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx drizzle/seed.ts"
   },
@@ -33,12 +33,13 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^24.7.2",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
-    "eslint": "^9.37.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.5",
     "eslint-config-next": "^16.3.6",
     "jsdom": "^27.0.0",
     "prettier": "^3.6.2",

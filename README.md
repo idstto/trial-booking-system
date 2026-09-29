@@ -1,56 +1,158 @@
-# Ottodot Take-Home Planning Package
+# Trial Booking System
 
-Status: planning only - no implementation has been created.
+A small, reliability-focused take-home implementation for booking a child into a trial class. A
+seeded parent can choose a child and class, create a booking, simulate payment success or failure, see
+the final status, and inspect the confirmed-only roster. PostgreSQL remains correct under retries,
+duplicates, and simultaneous attempts for the final seat.
 
-This package translates the Ottodot Full-Stack Engineer take-home brief into an implementation-ready plan. The source brief remains authoritative if anything here conflicts with it.
+## Quick start
 
-## Recommended direction
+Prerequisites: Node.js 24+, pnpm 12+, and Docker with Compose.
 
-Build a deliberately small, backend-led trial-booking slice. Use a relational database and make booking confirmation a single atomic transaction. The confirmation transaction locks the selected class, re-checks confirmed occupancy, verifies successful payment, and then confirms at most one booking for the final seat. Database constraints provide a second line of defense against duplicate active bookings.
+```powershell
+Copy-Item .env.example .env
+pnpm install --frozen-lockfile
+docker compose up -d db
+pnpm db:migrate
+pnpm db:seed
+pnpm dev
+```
 
-Suggested concrete stack for the later implementation:
+Open [http://localhost:3000](http://localhost:3000). The seed uses synthetic data only. The default
+demo parent is `Ari Parent` with children Maya and Noah.
 
-- TypeScript
-- Next.js with a minimal App Router UI and route handlers
-- PostgreSQL
-- Drizzle ORM plus explicit SQL where locking or partial indexes are clearer
-- Vitest for unit/integration tests and Playwright only if time remains
-- Docker Compose for one-command database startup
+## Verification
 
-The stack is a recommendation, not a requirement. The concurrency model matters more than the framework.
+```powershell
+pnpm format:check
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm test:race
+pnpm build
+```
 
-## Development and architecture posture
+`pnpm test:race` runs the final-seat scenario 100 times using two independent PostgreSQL connections.
+Docker must be running for integration, contract, and race tests. Tests use the separate
+`trial_booking_test` database; create it once if it does not exist:
 
-- Use compact spec-driven development: approve the requirements, design, acceptance criteria, and ordered tasks before implementation.
-- Implement reliability with a PostgreSQL transaction and an explicit booking state machine.
-- Do not implement a distributed Saga for the take-home. Document Saga-like compensation as the production evolution for real payment, void, and refund operations.
-- Do not introduce Kafka without demonstrated needs for multiple independent consumers, durable replay, or event throughput. A transactional outbox is the first production step if reliable publication becomes necessary.
-- Use one short-lived feature branch and clear commits. Full GitFlow is deliberately avoided because this exercise has no release train or parallel long-lived development streams.
+```powershell
+docker compose exec -T db createdb -U postgres trial_booking_test
+$env:DATABASE_URL='postgresql://postgres:postgres@localhost:5432/trial_booking_test'
+pnpm db:migrate
+```
 
-These decisions are positive evidence of scope control. Saga and Kafka are included as considered alternatives, not presented as implemented components.
+## What was built
 
-## Documents
+- Parent flow: list children and trial classes, create a pending booking, simulate payment, and show
+  final status.
+- Staff view: confirmed-only roster for the selected class.
+- Booking statuses: `pending_payment`, `confirmed`, `payment_failed`, `capacity_unavailable`, and
+  `cancelled`.
+- Stable JSON envelopes with request IDs and domain error codes.
+- Idempotent booking and payment-result commands using required `Idempotency-Key` headers and stored
+  request fingerprints.
+- PostgreSQL constraints for positive capacity, unique command keys, payment audit data, confirmed
+  timestamp consistency, and one active child/class booking.
+- Deterministic synthetic seed cases for ordinary availability, payment failure, duplicate booking,
+  a final seat, and a full class.
 
-| File | Purpose |
-| --- | --- |
-| [01-analysis-and-feedback.md](01-analysis-and-feedback.md) | Interpretation, risks, feedback, and scope advice |
-| [02-product-requirements.md](02-product-requirements.md) | Product scope, actors, requirements, acceptance criteria, and assumptions |
-| [03-technical-design.md](03-technical-design.md) | Architecture, schema, APIs, invariants, concurrency, errors, and observability |
-| [04-technical-decisions.md](04-technical-decisions.md) | Concise architecture decision records and tradeoffs |
-| [05-flowcharts.md](05-flowcharts.md) | Mermaid system, sequence, state, and decision diagrams |
-| [06-test-strategy.md](06-test-strategy.md) | Verification matrix, concurrency test design, seed data, and quality gates |
-| [07-implementation-prompt.md](07-implementation-prompt.md) | Structured prompt for a later coding session |
-| [08-submission-plan.md](08-submission-plan.md) | Four-hour plan, README/AI usage outlines, demo script, and final checklist |
+## Architecture
 
-## Core invariants
+```text
+UI / Next.js route handlers
+            ↓
+BookingService (use cases and transaction policy)
+            ↓
+BookingRepository ports
+            ↑
+PostgreSQL repository + transaction unit of work
+            ↓
+PostgreSQL constraints and row locks
+```
 
-1. A class has no more than `capacity` confirmed bookings; the seeded capacity is 4.
-2. A student has at most one active booking for a given class.
-3. Only a booking with a recorded successful payment result may become confirmed.
-4. Failed payment never places a student on the confirmed roster.
-5. Roster output contains confirmed bookings only.
-6. Repeated commands and payment callbacks are idempotent.
+Responsibilities are deliberately narrow:
 
-## Important product caveat
+- `src/app`: accessible UI and transport-only route handlers.
+- `src/application`: use cases, small persistence ports, idempotency fingerprints, composition root.
+- `src/domain`: framework-free status policy and typed domain errors.
+- `src/infrastructure/db`: PostgreSQL/Drizzle schema, queries, transactions, and lock protocol.
+- `tests`: unit, HTTP contract, and real PostgreSQL integration/concurrency verification.
 
-"Payment succeeded" and "seat acquired" are separate facts. In the take-home mock, a successful payment result can arrive after another user has taken the last seat. That booking must not be confirmed. It should transition to `capacity_unavailable`, retain an auditable payment attempt, and return a clear message. A production design should authorize first and capture only after the seat is claimed, or automatically void/refund the payment.
+This applies SOLID principles where they protect change boundaries. There is no generic repository
+base class or speculative abstraction: interfaces use booking language and expose only operations the
+use cases need.
+
+## Data and API
+
+The model contains `parents`, `students`, `trial_classes`, `bookings`, and `payment_attempts`. The full
+contract is in [OpenAPI](specs/001-trial-booking/contracts/openapi.yaml) and the lifecycle is in the
+[data model](specs/001-trial-booking/data-model.md).
+
+| Method | Route                               | Purpose                           |
+| ------ | ----------------------------------- | --------------------------------- |
+| `GET`  | `/api/students`                     | Children for the seeded parent    |
+| `GET`  | `/api/trial-classes`                | Classes and advisory availability |
+| `POST` | `/api/bookings`                     | Create a pending booking          |
+| `GET`  | `/api/bookings/{id}`                | Read current booking status       |
+| `POST` | `/api/bookings/{id}/payment-result` | Apply simulated success/failure   |
+| `GET`  | `/api/trial-classes/{id}/roster`    | Confirmed-only roster             |
+
+## Final-seat correctness
+
+Successful payment processing uses one transaction and one lock order:
+
+1. Lock and validate the booking.
+2. Return an exact stored replay or reject a conflicting idempotency payload.
+3. Lock the relevant `trial_classes` row.
+4. Count confirmed bookings while that class lock is held.
+5. Store the payment audit record and update the booking to `confirmed` or
+   `capacity_unavailable` atomically.
+
+Every capacity-changing path follows that protocol. Different classes lock different rows and can
+progress independently. `READ COMMITTED` is sufficient because the class row serializes the protected
+count/check/write sequence. UI availability is only a snapshot and never authorizes a seat.
+
+## Assumptions and deliberate cuts
+
+- A trusted seeded parent replaces full authentication; production must enforce parent ownership and
+  staff roles.
+- Payment is a local result, not an external charge. A production version should authorize, claim the
+  seat, capture, then void/refund and reconcile uncertain outcomes.
+- Only confirmed bookings consume capacity. There are no seat holds or expiry workers.
+- Regular enrollment, notifications, real payments, deployment infrastructure, and a complex admin UI
+  are outside the four-hour exercise scope.
+- No distributed Saga or Kafka is implemented. With independent payment/notification commits, add a
+  transactional outbox first and introduce Saga compensation or Kafka only when measured requirements
+  justify their failure modes and operations.
+- The repository uses `main` plus `feature/trial-booking`, not full GitFlow.
+
+## Monitoring in production
+
+Track booking outcomes, payment failures, capacity losses after successful payment, idempotent replay
+and conflict counts, confirmation latency, class-lock wait time, and stale pending bookings. Alert on
+either invariant violation: confirmed occupancy above capacity or a non-confirmed booking in roster
+output. Log request IDs and domain codes, never child details or payment secrets.
+
+## Spec-driven and test-driven workflow
+
+The governing artifacts live in [`specs/001-trial-booking`](specs/001-trial-booking). The repository
+also includes the Spec Kit constitution and workflow. Each implementation phase was developed as a
+red-green-refactor increment, committed, and pushed separately. The commit history shows the setup,
+foundation, booking/payment, idempotency/concurrency, roster, UI, and final verification phases.
+
+Approximate time spent: 3 hours across planning conversion, implementation, automated verification,
+and documentation. The final README should be updated if additional polish or video work changes the
+total.
+
+## Five-to-eight-minute demo outline
+
+1. Explain the scope, statuses, and architecture (60 seconds).
+2. Run the successful booking flow and show the roster update (90 seconds).
+3. Run a payment failure and duplicate/replay example (60 seconds).
+4. Run `pnpm test:race` and explain the booking-then-class lock order (90 seconds).
+5. Show the schema constraints, test layers, deliberate cuts, and production payment evolution
+   (90 seconds).
+
+Final delivery must be a public GitHub repository plus the video link; the brief does not accept a zip
+file.

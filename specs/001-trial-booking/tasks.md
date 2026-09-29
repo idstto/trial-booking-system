@@ -11,11 +11,11 @@ adding production code, then refactor only with a green suite.
 
 **Purpose**: Establish a deterministic full-stack and test toolchain.
 
-- [X] T001 Initialize the Next.js/TypeScript/pnpm project and scripts in `package.json`
-- [X] T002 [P] Configure TypeScript, Next.js, Vitest, ESLint, and formatting in `tsconfig.json`, `next.config.ts`, `vitest.config.ts`, `eslint.config.mjs`, and `.prettierrc.json`
-- [X] T003 [P] Create environment and ignore baselines in `.env.example`, `.gitignore`, `.dockerignore`, and `.prettierignore`
-- [X] T004 [P] Add PostgreSQL service and health check in `docker-compose.yml`
-- [X] T005 Create the application folder boundaries documented in `specs/001-trial-booking/plan.md`
+- [x] T001 Initialize the Next.js/TypeScript/pnpm project and scripts in `package.json`
+- [x] T002 [P] Configure TypeScript, Next.js, Vitest, ESLint, and formatting in `tsconfig.json`, `next.config.ts`, `vitest.config.ts`, `eslint.config.mjs`, and `.prettierrc.json`
+- [x] T003 [P] Create environment and ignore baselines in `.env.example`, `.gitignore`, `.dockerignore`, and `.prettierignore`
+- [x] T004 [P] Add PostgreSQL service and health check in `docker-compose.yml`
+- [x] T005 Create the application folder boundaries documented in `specs/001-trial-booking/plan.md`
 
 ---
 
@@ -23,16 +23,16 @@ adding production code, then refactor only with a green suite.
 
 **Purpose**: Build shared schema, configuration, error, database, and test foundations.
 
-- [X] T006 [P] Define booking/payment status types and legal terminal transitions in `src/domain/booking.ts`
-- [X] T007 [P] Define stable domain error codes and HTTP-independent errors in `src/domain/errors.ts`
-- [X] T008 Write failing domain transition and error tests in `tests/unit/booking.test.ts`
-- [X] T009 Implement the tested transition policy in `src/domain/booking.ts`
-- [X] T010 [P] Define validated environment access in `src/lib/env.ts`
-- [X] T011 [P] Define Drizzle tables with UUID keys, UTC timestamps, positive capacity, request fingerprints, and payment audit fields in `src/infrastructure/db/schema.ts`
-- [X] T012 Add SQL migration with foreign keys, unique request/payment keys, confirmed timestamp check, and active `(student_id, trial_class_id)` partial unique index in `drizzle/0000_initial.sql`
-- [X] T013 Implement database connection and transaction composition in `src/infrastructure/db/client.ts` and `src/infrastructure/db/transaction-manager.ts`
-- [X] T014 Build isolated PostgreSQL migration/reset helpers in `tests/helpers/database.ts`
-- [X] T015 Add deterministic synthetic records covering ordinary, full, last-seat, duplicate, and failure fixtures in `drizzle/seed.ts`
+- [x] T006 [P] Define booking/payment status types and legal terminal transitions in `src/domain/booking.ts`
+- [x] T007 [P] Define stable domain error codes and HTTP-independent errors in `src/domain/errors.ts`
+- [x] T008 Write failing domain transition and error tests in `tests/unit/booking.test.ts`
+- [x] T009 Implement the tested transition policy in `src/domain/booking.ts`
+- [x] T010 [P] Define validated environment access in `src/lib/env.ts`
+- [x] T011 [P] Define Drizzle tables with UUID keys, UTC timestamps, positive capacity, request fingerprints, and payment audit fields in `src/infrastructure/db/schema.ts`
+- [x] T012 Add SQL migration with foreign keys, unique request/payment keys, confirmed timestamp check, and active `(student_id, trial_class_id)` partial unique index in `drizzle/0000_initial.sql`
+- [x] T013 Implement database connection and transaction composition in `src/infrastructure/db/client.ts` and `src/infrastructure/db/transaction-manager.ts`
+- [x] T014 Build isolated PostgreSQL migration/reset helpers in `tests/helpers/database.ts`
+- [x] T015 Add deterministic synthetic records covering ordinary, full, last-seat, duplicate, and failure fixtures in `drizzle/seed.ts`
 
 **Checkpoint**: Schema and test database can be created and reset without manual edits.
 
@@ -47,17 +47,17 @@ status and occupancy through the application service.
 
 ### Tests for User Story 1
 
-- [X] T016 [P] [US1] Write failing repository integration tests for class availability, booking persistence, and payment audit fields in `tests/integration/repositories.test.ts`
-- [X] T017 [P] [US1] Write failing application integration tests for happy path, payment failure, full class, missing resources, and invalid terminal transitions in `tests/integration/booking-service.test.ts`
+- [x] T016 [P] [US1] Write failing repository integration tests for class availability, booking persistence, and payment audit fields in `tests/integration/repositories.test.ts`
+- [x] T017 [P] [US1] Write failing application integration tests for happy path, payment failure, full class, missing resources, and invalid terminal transitions in `tests/integration/booking-service.test.ts`
 
 ### Implementation for User Story 1
 
-- [X] T018 [US1] Define narrow transaction-scoped application ports in `src/application/ports.ts`
-- [X] T019 [US1] Implement Drizzle/PostgreSQL repository adapters in `src/infrastructure/db/repositories.ts`
-- [X] T020 [US1] Implement create booking and apply payment result use cases in `src/application/booking-service.ts`
-- [X] T021 [P] [US1] Write failing HTTP contract tests for students, classes, booking creation, payment result, and booking status in `tests/contract/api.test.ts`
-- [X] T022 [US1] Implement request IDs, response envelopes, validation, and error mapping in `src/lib/request-id.ts` and `src/lib/http.ts`
-- [X] T023 [US1] Implement thin handlers in `src/app/api/students/route.ts`, `src/app/api/trial-classes/route.ts`, `src/app/api/bookings/route.ts`, `src/app/api/bookings/[bookingId]/route.ts`, and `src/app/api/bookings/[bookingId]/payment-result/route.ts`
+- [x] T018 [US1] Define narrow transaction-scoped application ports in `src/application/ports.ts`
+- [x] T019 [US1] Implement Drizzle/PostgreSQL repository adapters in `src/infrastructure/db/repositories.ts`
+- [x] T020 [US1] Implement create booking and apply payment result use cases in `src/application/booking-service.ts`
+- [x] T021 [P] [US1] Write failing HTTP contract tests for students, classes, booking creation, payment result, and booking status in `tests/contract/api.test.ts`
+- [x] T022 [US1] Implement request IDs, response envelopes, validation, and error mapping in `src/lib/request-id.ts` and `src/lib/http.ts`
+- [x] T023 [US1] Implement thin handlers in `src/app/api/students/route.ts`, `src/app/api/trial-classes/route.ts`, `src/app/api/bookings/route.ts`, `src/app/api/bookings/[bookingId]/route.ts`, and `src/app/api/bookings/[bookingId]/payment-result/route.ts`
 
 **Checkpoint**: US1 contract and integration tests pass independently.
 
@@ -72,14 +72,14 @@ connections, replay both command types, and verify exact stored outcomes.
 
 ### Tests for User Story 2
 
-- [X] T024 [P] [US2] Write failing integration tests for booking replay, payment replay, conflicting payload reuse, and concurrent duplicate booking in `tests/integration/idempotency.test.ts`
-- [X] T025 [P] [US2] Write the failing two-connection final-seat barrier test and independent-class concurrency test in `tests/integration/last-seat-race.test.ts`
+- [x] T024 [P] [US2] Write failing integration tests for booking replay, payment replay, conflicting payload reuse, and concurrent duplicate booking in `tests/integration/idempotency.test.ts`
+- [x] T025 [P] [US2] Write the failing two-connection final-seat barrier test and independent-class concurrency test in `tests/integration/last-seat-race.test.ts`
 
 ### Implementation for User Story 2
 
-- [X] T026 [US2] Implement deterministic command fingerprints and exact replay/conflict rules in `src/application/idempotency.ts` and `src/application/booking-service.ts`
-- [X] T027 [US2] Implement the booking-then-class lock protocol and confirmed count under lock in `src/infrastructure/db/repositories.ts`
-- [X] T028 [US2] Map duplicate, idempotency, invalid-transition, and capacity outcomes to stable HTTP responses in `src/lib/http.ts`
+- [x] T026 [US2] Implement deterministic command fingerprints and exact replay/conflict rules in `src/application/idempotency.ts` and `src/application/booking-service.ts`
+- [x] T027 [US2] Implement the booking-then-class lock protocol and confirmed count under lock in `src/infrastructure/db/repositories.ts`
+- [x] T028 [US2] Map duplicate, idempotency, invalid-transition, and capacity outcomes to stable HTTP responses in `src/lib/http.ts`
 
 **Checkpoint**: The race test passes 100 repetitions with one winner and occupancy exactly at capacity.
 
@@ -93,13 +93,13 @@ connections, replay both command types, and verify exact stored outcomes.
 
 ### Tests for User Story 3
 
-- [X] T029 [P] [US3] Write failing confirmed-only roster repository and service tests in `tests/integration/roster.test.ts`
-- [X] T030 [P] [US3] Add the failing roster HTTP contract case to `tests/contract/api.test.ts`
+- [x] T029 [P] [US3] Write failing confirmed-only roster repository and service tests in `tests/integration/roster.test.ts`
+- [x] T030 [P] [US3] Add the failing roster HTTP contract case to `tests/contract/api.test.ts`
 
 ### Implementation for User Story 3
 
-- [X] T031 [US3] Implement the confirmed-only roster query and use case in `src/infrastructure/db/repositories.ts` and `src/application/booking-service.ts`
-- [X] T032 [US3] Implement `GET /api/trial-classes/{classId}/roster` in `src/app/api/trial-classes/[classId]/roster/route.ts`
+- [x] T031 [US3] Implement the confirmed-only roster query and use case in `src/infrastructure/db/repositories.ts` and `src/application/booking-service.ts`
+- [x] T032 [US3] Implement `GET /api/trial-classes/{classId}/roster` in `src/app/api/trial-classes/[classId]/roster/route.ts`
 
 **Checkpoint**: Mixed-status data produces a roster containing confirmed entries only.
 
@@ -109,13 +109,13 @@ connections, replay both command types, and verify exact stored outcomes.
 
 **Purpose**: Demonstrate the verified backend and prepare a public-repository-ready submission.
 
-- [X] T033 Write failing component tests for selection, booking, payment controls, visible status, and roster refresh in `tests/unit/booking-flow.test.tsx`
-- [X] T034 Implement the accessible server-led booking interface in `src/app/page.tsx`, `src/app/booking-flow.tsx`, and `src/app/globals.css`
-- [ ] T035 [P] Add scripts for migrate, seed, unit, integration, contract, and 100-run race verification in `package.json`
-- [ ] T036 [P] Write accurate setup, architecture, transaction, tradeoff, monitoring, and demo guidance in `README.md`
-- [ ] T037 [P] Document AI acceleration, rejected suggestions, corrections, and verification in `AI_USAGE.md`
-- [ ] T038 Run format, lint, typecheck, build, all tests, seed validation, and 100 race repetitions; record evidence in `specs/001-trial-booking/verification.md`
-- [ ] T039 Reconcile `spec.md`, `plan.md`, contracts, implementation, README, and AI notes; document any deliberate deviation in `specs/001-trial-booking/verification.md`
+- [x] T033 Write failing component tests for selection, booking, payment controls, visible status, and roster refresh in `tests/unit/booking-flow.test.tsx`
+- [x] T034 Implement the accessible server-led booking interface in `src/app/page.tsx`, `src/app/booking-flow.tsx`, and `src/app/globals.css`
+- [x] T035 [P] Add scripts for migrate, seed, unit, integration, contract, and 100-run race verification in `package.json`
+- [x] T036 [P] Write accurate setup, architecture, transaction, tradeoff, monitoring, and demo guidance in `README.md`
+- [x] T037 [P] Document AI acceleration, rejected suggestions, corrections, and verification in `AI_USAGE.md`
+- [x] T038 Run format, lint, typecheck, build, all tests, seed validation, and 100 race repetitions; record evidence in `specs/001-trial-booking/verification.md`
+- [x] T039 Reconcile `spec.md`, `plan.md`, contracts, implementation, README, and AI notes; document any deliberate deviation in `specs/001-trial-booking/verification.md`
 
 ---
 
@@ -130,15 +130,15 @@ connections, replay both command types, and verify exact stored outcomes.
 
 ## Requirement Coverage
 
-| Requirement | Tasks |
-| --- | --- |
-| FR-001–FR-005, FR-012–FR-014 | T016–T023 |
-| FR-007–FR-011 | T024–T028 |
-| FR-006 | T029–T032 |
-| FR-015 | T014–T015 |
-| SC-001, SC-006 | T033–T039 |
-| SC-002, SC-004 | T024–T028, T038 |
-| SC-003, SC-005 | T016–T032, T038 |
+| Requirement                  | Tasks           |
+| ---------------------------- | --------------- |
+| FR-001–FR-005, FR-012–FR-014 | T016–T023       |
+| FR-007–FR-011                | T024–T028       |
+| FR-006                       | T029–T032       |
+| FR-015                       | T014–T015       |
+| SC-001, SC-006               | T033–T039       |
+| SC-002, SC-004               | T024–T028, T038 |
+| SC-003, SC-005               | T016–T032, T038 |
 
 ## Parallel Opportunities
 

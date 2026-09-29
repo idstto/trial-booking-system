@@ -20,55 +20,59 @@ afterAll(async () => {
 
 describe("capacity concurrency", () => {
   it("confirms exactly one contender for the final seat", async () => {
-    const fixture = await createBaseFixture(setupSql);
-    const [classRow] = await setupSql`
+    const repetitions = Number(process.env.RACE_REPETITIONS ?? "1");
+    for (let iteration = 0; iteration < repetitions; iteration += 1) {
+      await resetTestDatabase(setupSql);
+      const fixture = await createBaseFixture(setupSql);
+      const [classRow] = await setupSql`
       INSERT INTO trial_classes (title, starts_at, capacity)
       VALUES ('Last Seat', now(), 1) RETURNING id
     `;
-    const bookingOne = await serviceOne.createBooking({
-      parentId: fixture.parentId,
-      studentId: fixture.studentId,
-      trialClassId: classRow!.id,
-      requestKey: "race-create-one",
-    });
-    const bookingTwo = await serviceTwo.createBooking({
-      parentId: fixture.parentId,
-      studentId: fixture.otherStudentId,
-      trialClassId: classRow!.id,
-      requestKey: "race-create-two",
-    });
+      const bookingOne = await serviceOne.createBooking({
+        parentId: fixture.parentId,
+        studentId: fixture.studentId,
+        trialClassId: classRow!.id,
+        requestKey: `race-create-one-${iteration}`,
+      });
+      const bookingTwo = await serviceTwo.createBooking({
+        parentId: fixture.parentId,
+        studentId: fixture.otherStudentId,
+        trialClassId: classRow!.id,
+        requestKey: `race-create-two-${iteration}`,
+      });
 
-    let release!: () => void;
-    const barrier = new Promise<void>((resolve) => (release = resolve));
-    const attempts = [
-      (async () => {
-        await barrier;
-        return serviceOne.applyPaymentResult({
-          parentId: fixture.parentId,
-          bookingId: bookingOne.id,
-          idempotencyKey: "race-payment-one",
-          result: "succeeded",
-        });
-      })(),
-      (async () => {
-        await barrier;
-        return serviceTwo.applyPaymentResult({
-          parentId: fixture.parentId,
-          bookingId: bookingTwo.id,
-          idempotencyKey: "race-payment-two",
-          result: "succeeded",
-        });
-      })(),
-    ];
-    release();
+      let release!: () => void;
+      const barrier = new Promise<void>((resolve) => (release = resolve));
+      const attempts = [
+        (async () => {
+          await barrier;
+          return serviceOne.applyPaymentResult({
+            parentId: fixture.parentId,
+            bookingId: bookingOne.id,
+            idempotencyKey: `race-payment-one-${iteration}`,
+            result: "succeeded",
+          });
+        })(),
+        (async () => {
+          await barrier;
+          return serviceTwo.applyPaymentResult({
+            parentId: fixture.parentId,
+            bookingId: bookingTwo.id,
+            idempotencyKey: `race-payment-two-${iteration}`,
+            result: "succeeded",
+          });
+        })(),
+      ];
+      release();
 
-    const outcomes = (await Promise.all(attempts)).map((booking) => booking.status).sort();
-    expect(outcomes).toEqual(["capacity_unavailable", "confirmed"]);
-    const [row] = await setupSql<{ count: number }[]>`
+      const outcomes = (await Promise.all(attempts)).map((booking) => booking.status).sort();
+      expect(outcomes).toEqual(["capacity_unavailable", "confirmed"]);
+      const [row] = await setupSql<{ count: number }[]>`
       SELECT count(*)::int AS count FROM bookings
       WHERE trial_class_id = ${classRow!.id} AND status = 'confirmed'
     `;
-    expect(row!.count).toBe(1);
+      expect(row!.count).toBe(1);
+    }
   });
 
   it("does not serialize capacity across unrelated classes", async () => {

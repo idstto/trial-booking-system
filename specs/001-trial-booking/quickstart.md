@@ -46,4 +46,3 @@ with exactly one new confirmation and total confirmed occupancy equal to four.
 
 Expected HTTP shapes and error codes are defined in [contracts/openapi.yaml](./contracts/openapi.yaml).
 Schema constraints and state transitions are defined in [data-model.md](./data-model.md).
-

@@ -1,10 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-import {
-  createTestClient,
-  migrateTestDatabase,
-  resetTestDatabase,
-} from "../helpers/database";
+import { createTestClient, migrateTestDatabase, resetTestDatabase } from "../helpers/database";
 
 const sql = createTestClient();
 

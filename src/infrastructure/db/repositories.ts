@@ -39,7 +39,8 @@ export class PostgresBookingRepository implements BookingRepository {
   }
 
   async studentBelongsToParent(studentId: string, parentId: string): Promise<boolean> {
-    const [row] = await this.sql`SELECT 1 FROM students WHERE id = ${studentId} AND parent_id = ${parentId}`;
+    const [row] = await this
+      .sql`SELECT 1 FROM students WHERE id = ${studentId} AND parent_id = ${parentId}`;
     return Boolean(row);
   }
 

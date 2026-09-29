@@ -9,7 +9,7 @@
 **Input**: User description: "Translate the approved trial-booking documentation to Spec Kit and
 implement it using TDD, SOLID principles, and best practices."
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Parent books and pays for a trial class (Priority: P1)
 
@@ -88,7 +88,7 @@ and verify that it contains each confirmed child exactly once and no other child
 - An unexpected persistence failure occurs during confirmation; no partial payment or booking state is
   committed.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -117,7 +117,7 @@ and verify that it contains each confirmed child exactly once and no other child
 - **FR-015**: The demo MUST include synthetic seed data for ordinary availability, a final-seat case,
   a duplicate case, and a payment-failure case.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Parent**: The adult using the seeded demo identity; owns one or more children.
 - **Student**: A child eligible for a trial booking and belonging to one parent.
@@ -127,7 +127,7 @@ and verify that it contains each confirmed child exactly once and no other child
 - **Payment Attempt**: An auditable simulated payment result associated with one booking and one
   idempotency key.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
@@ -156,4 +156,3 @@ and verify that it contains each confirmed child exactly once and no other child
   documented but not implemented.
 - The feature is delivered as one deployable application with one authoritative relational database.
 - A distributed Saga, Kafka, regular enrollment, notifications, and full GitFlow are outside scope.
-

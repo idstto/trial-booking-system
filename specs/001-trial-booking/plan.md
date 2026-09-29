@@ -40,15 +40,15 @@ statuses, six HTTP operations, and one compact booking/roster UI
 
 ## Constitution Check
 
-*GATE: Passes before Phase 0 and after Phase 1.*
+_GATE: Passes before Phase 0 and after Phase 1._
 
-| Principle | Design evidence | Status |
-| --- | --- | --- |
-| Test-First Delivery | Each story’s tasks place tests before production code; database and HTTP contracts use real boundaries. | PASS |
-| Database correctness | Partial uniqueness, idempotency constraints, class-row locking, and confirmed-only queries are explicit. | PASS |
-| SOLID boundaries | UI, route, application, domain, repository, and adapter responsibilities are separated with inward dependencies. | PASS |
-| Simplicity and scope | One deployable app and one database; deferred infrastructure is documented only. | PASS |
-| Traceable verification | FR/SC identifiers map to contracts, tasks, and the verification matrix. | PASS |
+| Principle              | Design evidence                                                                                                  | Status |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ------ |
+| Test-First Delivery    | Each story’s tasks place tests before production code; database and HTTP contracts use real boundaries.          | PASS   |
+| Database correctness   | Partial uniqueness, idempotency constraints, class-row locking, and confirmed-only queries are explicit.         | PASS   |
+| SOLID boundaries       | UI, route, application, domain, repository, and adapter responsibilities are separated with inward dependencies. | PASS   |
+| Simplicity and scope   | One deployable app and one database; deferred infrastructure is documented only.                                 | PASS   |
+| Traceable verification | FR/SC identifiers map to contracts, tasks, and the verification matrix.                                          | PASS   |
 
 Post-design re-check: PASS. No exception or complexity waiver is required.
 
@@ -141,4 +141,3 @@ depend on the application ports, satisfying dependency inversion without a secon
 No constitution violations. The repository interface and transaction manager exist because integration
 tests must substitute transaction-scoped adapters and because database policy must stay out of routes;
 they remain small, use-case-oriented interfaces rather than a generic persistence framework.
-

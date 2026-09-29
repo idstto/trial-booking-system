@@ -89,4 +89,3 @@ Booking 1 ── * PaymentAttempt
 4. For failure, record attempt and set `payment_failed` atomically.
 5. For success, lock the class row, record the attempt, count confirmed bookings, then set
    `confirmed` or `capacity_unavailable` before committing.
-

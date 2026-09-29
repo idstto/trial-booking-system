@@ -68,4 +68,3 @@ the constrained implementation window. Versions are captured by the committed lo
 
 **Alternatives considered**: npm is unavailable in the current runtime; Bun could reduce install time
 but would add a less conventional reviewer prerequisite.
-

@@ -43,7 +43,10 @@ export async function handleRoute(
     if (error instanceof ZodError) {
       return errorResponse(
         new DomainError("VALIDATION_ERROR", "Request validation failed", {
-          issues: error.issues.map((issue) => ({ path: issue.path.join("."), message: issue.message })),
+          issues: error.issues.map((issue) => ({
+            path: issue.path.join("."),
+            message: issue.message,
+          })),
         }),
         requestId,
       );
@@ -61,7 +64,11 @@ export async function handleRoute(
 function errorResponse(error: DomainError, requestId: string): Response {
   return Response.json(
     {
-      error: { code: error.code, message: error.message, ...(error.details && { details: error.details }) },
+      error: {
+        code: error.code,
+        message: error.message,
+        ...(error.details && { details: error.details }),
+      },
       requestId,
     },
     { status: statusByCode[error.code] },

@@ -9,7 +9,7 @@ paths:
     get:
       summary: List children for the seeded parent
       responses:
-        '200':
+        "200":
           description: Student collection
           content:
             application/json:
@@ -19,13 +19,13 @@ paths:
                 properties:
                   data:
                     type: array
-                    items: { $ref: '#/components/schemas/Student' }
+                    items: { $ref: "#/components/schemas/Student" }
                   requestId: { type: string }
   /trial-classes:
     get:
       summary: List classes with advisory availability
       responses:
-        '200':
+        "200":
           description: Trial class collection
           content:
             application/json:
@@ -35,15 +35,15 @@ paths:
                 properties:
                   data:
                     type: array
-                    items: { $ref: '#/components/schemas/TrialClass' }
+                    items: { $ref: "#/components/schemas/TrialClass" }
                   requestId: { type: string }
   /trial-classes/{classId}/roster:
     get:
       summary: Get confirmed-only roster
       parameters:
-        - $ref: '#/components/parameters/ClassId'
+        - $ref: "#/components/parameters/ClassId"
       responses:
-        '200':
+        "200":
           description: Confirmed roster
           content:
             application/json:
@@ -53,14 +53,14 @@ paths:
                 properties:
                   data:
                     type: array
-                    items: { $ref: '#/components/schemas/RosterEntry' }
+                    items: { $ref: "#/components/schemas/RosterEntry" }
                   requestId: { type: string }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "404": { $ref: "#/components/responses/NotFound" }
   /bookings:
     post:
       summary: Create a pending booking
       parameters:
-        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
@@ -73,25 +73,25 @@ paths:
                 studentId: { type: string, format: uuid }
                 trialClassId: { type: string, format: uuid }
       responses:
-        '201': { $ref: '#/components/responses/BookingResult' }
-        '200': { $ref: '#/components/responses/BookingResult' }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '409': { $ref: '#/components/responses/Conflict' }
+        "201": { $ref: "#/components/responses/BookingResult" }
+        "200": { $ref: "#/components/responses/BookingResult" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
   /bookings/{bookingId}:
     get:
       summary: Get booking status
       parameters:
-        - $ref: '#/components/parameters/BookingId'
+        - $ref: "#/components/parameters/BookingId"
       responses:
-        '200': { $ref: '#/components/responses/BookingResult' }
-        '404': { $ref: '#/components/responses/NotFound' }
+        "200": { $ref: "#/components/responses/BookingResult" }
+        "404": { $ref: "#/components/responses/NotFound" }
   /bookings/{bookingId}/payment-result:
     post:
       summary: Record a mock payment result and finalize the booking
       parameters:
-        - $ref: '#/components/parameters/BookingId'
-        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: "#/components/parameters/BookingId"
+        - $ref: "#/components/parameters/IdempotencyKey"
       requestBody:
         required: true
         content:
@@ -103,10 +103,10 @@ paths:
               properties:
                 result: { type: string, enum: [succeeded, failed] }
       responses:
-        '200': { $ref: '#/components/responses/BookingResult' }
-        '400': { $ref: '#/components/responses/BadRequest' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '409': { $ref: '#/components/responses/Conflict' }
+        "200": { $ref: "#/components/responses/BookingResult" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { $ref: "#/components/responses/Conflict" }
 components:
   parameters:
     BookingId:
@@ -137,7 +137,7 @@ components:
           enum: [pending_payment, confirmed, payment_failed, capacity_unavailable, cancelled]
         createdAt: { type: string, format: date-time }
         updatedAt: { type: string, format: date-time }
-        confirmedAt: { type: [string, 'null'], format: date-time }
+        confirmedAt: { type: [string, "null"], format: date-time }
     Student:
       type: object
       required: [id, name]
@@ -183,20 +183,20 @@ components:
             type: object
             required: [data, requestId]
             properties:
-              data: { $ref: '#/components/schemas/Booking' }
+              data: { $ref: "#/components/schemas/Booking" }
               requestId: { type: string }
     BadRequest:
       description: Invalid request
       content:
         application/json:
-          schema: { $ref: '#/components/schemas/Error' }
+          schema: { $ref: "#/components/schemas/Error" }
     NotFound:
       description: Resource not found
       content:
         application/json:
-          schema: { $ref: '#/components/schemas/Error' }
+          schema: { $ref: "#/components/schemas/Error" }
     Conflict:
       description: Duplicate, idempotency, capacity, or transition conflict
       content:
         application/json:
-          schema: { $ref: '#/components/schemas/Error' }
+          schema: { $ref: "#/components/schemas/Error" }
