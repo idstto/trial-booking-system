@@ -15,7 +15,7 @@ adding production code, then refactor only with a green suite.
 - [X] T002 [P] Configure TypeScript, Next.js, Vitest, ESLint, and formatting in `tsconfig.json`, `next.config.ts`, `vitest.config.ts`, `eslint.config.mjs`, and `.prettierrc.json`
 - [X] T003 [P] Create environment and ignore baselines in `.env.example`, `.gitignore`, `.dockerignore`, and `.prettierignore`
 - [X] T004 [P] Add PostgreSQL service and health check in `docker-compose.yml`
-- [ ] T005 Create the application folder boundaries documented in `specs/001-trial-booking/plan.md`
+- [X] T005 Create the application folder boundaries documented in `specs/001-trial-booking/plan.md`
 
 ---
 
@@ -23,16 +23,16 @@ adding production code, then refactor only with a green suite.
 
 **Purpose**: Build shared schema, configuration, error, database, and test foundations.
 
-- [ ] T006 [P] Define booking/payment status types and legal terminal transitions in `src/domain/booking.ts`
-- [ ] T007 [P] Define stable domain error codes and HTTP-independent errors in `src/domain/errors.ts`
-- [ ] T008 Write failing domain transition and error tests in `tests/unit/booking.test.ts`
-- [ ] T009 Implement the tested transition policy in `src/domain/booking.ts`
-- [ ] T010 [P] Define validated environment access in `src/lib/env.ts`
-- [ ] T011 [P] Define Drizzle tables with UUID keys, UTC timestamps, positive capacity, request fingerprints, and payment audit fields in `src/infrastructure/db/schema.ts`
-- [ ] T012 Add SQL migration with foreign keys, unique request/payment keys, confirmed timestamp check, and active `(student_id, trial_class_id)` partial unique index in `drizzle/0000_initial.sql`
-- [ ] T013 Implement database connection and transaction composition in `src/infrastructure/db/client.ts` and `src/infrastructure/db/transaction-manager.ts`
-- [ ] T014 Build isolated PostgreSQL migration/reset helpers in `tests/helpers/database.ts`
-- [ ] T015 Add deterministic synthetic records covering ordinary, full, last-seat, duplicate, and failure fixtures in `drizzle/seed.ts`
+- [X] T006 [P] Define booking/payment status types and legal terminal transitions in `src/domain/booking.ts`
+- [X] T007 [P] Define stable domain error codes and HTTP-independent errors in `src/domain/errors.ts`
+- [X] T008 Write failing domain transition and error tests in `tests/unit/booking.test.ts`
+- [X] T009 Implement the tested transition policy in `src/domain/booking.ts`
+- [X] T010 [P] Define validated environment access in `src/lib/env.ts`
+- [X] T011 [P] Define Drizzle tables with UUID keys, UTC timestamps, positive capacity, request fingerprints, and payment audit fields in `src/infrastructure/db/schema.ts`
+- [X] T012 Add SQL migration with foreign keys, unique request/payment keys, confirmed timestamp check, and active `(student_id, trial_class_id)` partial unique index in `drizzle/0000_initial.sql`
+- [X] T013 Implement database connection and transaction composition in `src/infrastructure/db/client.ts` and `src/infrastructure/db/transaction-manager.ts`
+- [X] T014 Build isolated PostgreSQL migration/reset helpers in `tests/helpers/database.ts`
+- [X] T015 Add deterministic synthetic records covering ordinary, full, last-seat, duplicate, and failure fixtures in `drizzle/seed.ts`
 
 **Checkpoint**: Schema and test database can be created and reset without manual edits.
 
