@@ -93,13 +93,13 @@ connections, replay both command types, and verify exact stored outcomes.
 
 ### Tests for User Story 3
 
-- [ ] T029 [P] [US3] Write failing confirmed-only roster repository and service tests in `tests/integration/roster.test.ts`
-- [ ] T030 [P] [US3] Add the failing roster HTTP contract case to `tests/contract/api.test.ts`
+- [X] T029 [P] [US3] Write failing confirmed-only roster repository and service tests in `tests/integration/roster.test.ts`
+- [X] T030 [P] [US3] Add the failing roster HTTP contract case to `tests/contract/api.test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T031 [US3] Implement the confirmed-only roster query and use case in `src/infrastructure/db/repositories.ts` and `src/application/booking-service.ts`
-- [ ] T032 [US3] Implement `GET /api/trial-classes/{classId}/roster` in `src/app/api/trial-classes/[classId]/roster/route.ts`
+- [X] T031 [US3] Implement the confirmed-only roster query and use case in `src/infrastructure/db/repositories.ts` and `src/application/booking-service.ts`
+- [X] T032 [US3] Implement `GET /api/trial-classes/{classId}/roster` in `src/app/api/trial-classes/[classId]/roster/route.ts`
 
 **Checkpoint**: Mixed-status data produces a roster containing confirmed entries only.
 

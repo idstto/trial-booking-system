@@ -5,6 +5,7 @@ import { GET as getBooking } from "@/app/api/bookings/[bookingId]/route";
 import { POST as applyPayment } from "@/app/api/bookings/[bookingId]/payment-result/route";
 import { GET as listStudents } from "@/app/api/students/route";
 import { GET as listClasses } from "@/app/api/trial-classes/route";
+import { GET as getRoster } from "@/app/api/trial-classes/[classId]/roster/route";
 
 import { createTestClient, migrateTestDatabase, resetTestDatabase } from "../helpers/database";
 import { createBaseFixture } from "../helpers/fixtures";
@@ -83,5 +84,25 @@ describe("trial booking HTTP contract", () => {
       error: { code: "VALIDATION_ERROR", message: expect.any(String) },
       requestId: expect.any(String),
     });
+  });
+
+  it("returns a confirmed-only class roster", async () => {
+    const fixture = await createBaseFixture(sql);
+    await sql`
+      INSERT INTO bookings
+        (student_id, trial_class_id, status, request_key, request_fingerprint, confirmed_at)
+      VALUES
+        (${fixture.studentId}, ${fixture.trialClassId}, 'confirmed', 'contract-roster-confirmed', 'one', now()),
+        (${fixture.otherStudentId}, ${fixture.trialClassId}, 'payment_failed', 'contract-roster-failed', 'two', NULL)
+    `;
+
+    const response = await getRoster(new Request("http://localhost"), {
+      params: Promise.resolve({ classId: fixture.trialClassId }),
+    });
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toHaveLength(1);
+    expect(body.data[0]).toMatchObject({ studentId: fixture.studentId });
   });
 });
