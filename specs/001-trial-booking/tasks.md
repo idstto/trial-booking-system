@@ -11,10 +11,10 @@ adding production code, then refactor only with a green suite.
 
 **Purpose**: Establish a deterministic full-stack and test toolchain.
 
-- [ ] T001 Initialize the Next.js/TypeScript/pnpm project and scripts in `package.json`
-- [ ] T002 [P] Configure TypeScript, Next.js, Vitest, ESLint, and formatting in `tsconfig.json`, `next.config.ts`, `vitest.config.ts`, `eslint.config.mjs`, and `.prettierrc.json`
-- [ ] T003 [P] Create environment and ignore baselines in `.env.example`, `.gitignore`, `.dockerignore`, and `.prettierignore`
-- [ ] T004 [P] Add PostgreSQL service and health check in `docker-compose.yml`
+- [X] T001 Initialize the Next.js/TypeScript/pnpm project and scripts in `package.json`
+- [X] T002 [P] Configure TypeScript, Next.js, Vitest, ESLint, and formatting in `tsconfig.json`, `next.config.ts`, `vitest.config.ts`, `eslint.config.mjs`, and `.prettierrc.json`
+- [X] T003 [P] Create environment and ignore baselines in `.env.example`, `.gitignore`, `.dockerignore`, and `.prettierignore`
+- [X] T004 [P] Add PostgreSQL service and health check in `docker-compose.yml`
 - [ ] T005 Create the application folder boundaries documented in `specs/001-trial-booking/plan.md`
 
 ---
