@@ -25,9 +25,10 @@ describe("command idempotency", () => {
     };
 
     const first = await service.createBooking(command);
-    const replay = await service.createBooking(command);
-
-    expect(replay.id).toBe(first.id);
+    for (let replayIndex = 0; replayIndex < 10; replayIndex += 1) {
+      const replay = await service.createBooking(command);
+      expect(replay.id).toBe(first.id);
+    }
     const [row] = await sql<{ count: number }[]>`
       SELECT count(*)::int AS count FROM bookings WHERE request_key = ${command.requestKey}
     `;
@@ -36,7 +37,7 @@ describe("command idempotency", () => {
 
   it("rejects creation key reuse with a different payload", async () => {
     const fixture = await createBaseFixture(sql);
-    await service.createBooking({
+    const original = await service.createBooking({
       parentId: fixture.parentId,
       studentId: fixture.studentId,
       trialClassId: fixture.trialClassId,
@@ -53,6 +54,20 @@ describe("command idempotency", () => {
     ).rejects.toEqual(
       expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }),
     );
+    const rows = await sql<
+      { id: string; studentId: string; trialClassId: string; status: string }[]
+    >`
+      SELECT id, student_id, trial_class_id, status FROM bookings
+      WHERE request_key = 'create-conflict-key'
+    `;
+    expect(rows).toEqual([
+      {
+        id: original.id,
+        studentId: fixture.studentId,
+        trialClassId: fixture.trialClassId,
+        status: "pending_payment",
+      },
+    ]);
   });
 
   it("returns the same terminal outcome for an exact payment replay", async () => {
@@ -69,9 +84,10 @@ describe("command idempotency", () => {
     };
 
     const first = await service.applyPaymentResult(command);
-    const replay = await service.applyPaymentResult(command);
-
-    expect(replay).toEqual(first);
+    for (let replayIndex = 0; replayIndex < 10; replayIndex += 1) {
+      const replay = await service.applyPaymentResult(command);
+      expect(replay).toEqual(first);
+    }
     const [row] = await sql<{ count: number }[]>`
       SELECT count(*)::int AS count FROM payment_attempts
       WHERE idempotency_key = ${command.idempotencyKey}
@@ -85,7 +101,7 @@ describe("command idempotency", () => {
       ...fixture,
       requestKey: "payment-conflict-create",
     });
-    await service.applyPaymentResult({
+    const original = await service.applyPaymentResult({
       parentId: fixture.parentId,
       bookingId: booking.id,
       idempotencyKey: "payment-conflict-key",
@@ -102,6 +118,23 @@ describe("command idempotency", () => {
     ).rejects.toEqual(
       expect.objectContaining<Partial<DomainError>>({ code: "IDEMPOTENCY_CONFLICT" }),
     );
+    const [storedBooking] = await sql<{ status: string }[]>`
+      SELECT status FROM bookings WHERE id = ${booking.id}
+    `;
+    const attempts = await sql<
+      { bookingId: string; result: string; bookingStatus: string }[]
+    >`
+      SELECT booking_id, result, booking_status FROM payment_attempts
+      WHERE idempotency_key = 'payment-conflict-key'
+    `;
+    expect(storedBooking!.status).toBe(original.status);
+    expect(attempts).toEqual([
+      {
+        bookingId: booking.id,
+        result: "failed",
+        bookingStatus: "payment_failed",
+      },
+    ]);
   });
 
   it("allows only one concurrent active booking", async () => {

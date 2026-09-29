@@ -77,6 +77,22 @@ describe("BookingService", () => {
     });
 
     expect(result.status).toBe("capacity_unavailable");
+    const [occupancy] = await sql<{ count: number }[]>`
+      SELECT count(*)::int AS count FROM bookings
+      WHERE trial_class_id = ${fixture.fullClassId} AND status = 'confirmed'
+    `;
+    const [attempt] = await sql<
+      { result: string; bookingStatus: string; bookingId: string }[]
+    >`
+      SELECT result, booking_status, booking_id FROM payment_attempts
+      WHERE idempotency_key = 'service-full-payment'
+    `;
+    expect(occupancy!.count).toBe(1);
+    expect(attempt).toEqual({
+      result: "succeeded",
+      bookingStatus: "capacity_unavailable",
+      bookingId: booking.id,
+    });
   });
 
   it("rejects missing students and classes with stable domain errors", async () => {
