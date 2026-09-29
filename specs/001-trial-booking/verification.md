@@ -11,7 +11,7 @@
 | Formatting            | PASS   | `pnpm format:check` — all matched files use Prettier style                     |
 | Lint                  | PASS   | `pnpm lint` — zero warnings/errors                                             |
 | Type safety           | PASS   | `pnpm typecheck` — zero TypeScript errors                                      |
-| Full suite            | PASS   | `pnpm test` — 9 files, 30 tests passed                                         |
+| Full suite            | PASS   | `pnpm test` — 9 files, 32 tests passed                                         |
 | Final-seat repetition | PASS   | `pnpm test:race` — 100 two-connection races plus independent-class case passed |
 | Production build      | PASS   | `pnpm build` — page and all six API routes compiled                            |
 | Migration replay      | PASS   | `pnpm db:migrate` — completed against an already-migrated database             |
@@ -24,14 +24,15 @@
 | Available class confirms and enters roster       | `booking-service.test.ts`, `api.test.ts`, `roster.test.ts` |
 | Failed payment does not enter roster             | `booking-service.test.ts`, `roster.test.ts`                |
 | Duplicate active booking is prevented            | `schema.test.ts`, `idempotency.test.ts`                    |
-| Full class remains at capacity                   | `booking-service.test.ts`                                  |
+| Full class remains at capacity with audit record | `booking-service.test.ts`                                  |
 | Simultaneous final-seat attempts have one winner | `last-seat-race.test.ts`, repeated 100 times               |
-| Booking and payment replays are stable           | `idempotency.test.ts`                                      |
-| Conflicting key reuse changes no state           | `idempotency.test.ts`                                      |
+| Ten booking and payment replays are stable       | `idempotency.test.ts`                                      |
+| Conflicting key reuse changes no stored state    | `idempotency.test.ts`                                      |
 | Roster contains confirmed bookings only          | `roster.test.ts`, `api.test.ts`                            |
 | Different classes progress independently         | `last-seat-race.test.ts`                                   |
 | Terminal booking rejects a new payment command   | `booking-service.test.ts`                                  |
 | Accessible UI exposes the primary flow           | `booking-flow.test.tsx`                                    |
+| Unknown POST fields are rejected                 | `api.test.ts`                                              |
 
 ## TDD evidence
 
@@ -39,6 +40,10 @@ Red states were observed before implementation for domain policy, booking/paymen
 HTTP routes, idempotent replay, payment-key conflicts, the roster endpoint, and the UI. Each phase was
 made green and pushed as a separate commit. Database concurrency tests use independent real connections;
 the database is not mocked.
+
+The convergence pass added strict OpenAPI-aligned request tests, unchanged-state assertions for
+idempotency conflicts, auditable full-class outcome checks, and ten-replay verification. Its red,
+green, and refactor states were committed and pushed separately.
 
 ## Reconciliation and deviations
 

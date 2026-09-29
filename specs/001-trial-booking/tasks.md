@@ -155,7 +155,7 @@ slice. Stop at any checkpoint if a sequential task fails; do not bypass a red te
 
 ## Phase 7: Convergence
 
-- [ ] T040 CRITICAL enforce strict POST request-body validation and add HTTP contract coverage for unknown fields so the runtime agrees with `additionalProperties: false` in `contracts/openapi.yaml` per Constitution V and T039 (contradicts)
-- [ ] T041 Extend the full-class successful-payment integration test to assert confirmed occupancy remains unchanged and the `capacity_unavailable` payment attempt is persisted for audit per US1/AC3, FR-013, and SC-003 (partial)
-- [ ] T042 Add before-and-after persistence assertions proving conflicting booking and payment idempotency-key reuse leaves the original state unchanged per US2/AC4 and SC-003 (partial)
-- [ ] T043 Exercise ten exact replays of both booking creation and payment-result commands and assert one effective stored booking and payment attempt per SC-004 (partial)
+- [x] T040 CRITICAL enforce strict POST request-body validation and add HTTP contract coverage for unknown fields so the runtime agrees with `additionalProperties: false` in `contracts/openapi.yaml` per Constitution V and T039 (contradicts)
+- [x] T041 Extend the full-class successful-payment integration test to assert confirmed occupancy remains unchanged and the `capacity_unavailable` payment attempt is persisted for audit per US1/AC3, FR-013, and SC-003 (partial)
+- [x] T042 Add before-and-after persistence assertions proving conflicting booking and payment idempotency-key reuse leaves the original state unchanged per US2/AC4 and SC-003 (partial)
+- [x] T043 Exercise ten exact replays of both booking creation and payment-result commands and assert one effective stored booking and payment attempt per SC-004 (partial)
