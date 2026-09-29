@@ -47,17 +47,17 @@ status and occupancy through the application service.
 
 ### Tests for User Story 1
 
-- [ ] T016 [P] [US1] Write failing repository integration tests for class availability, booking persistence, and payment audit fields in `tests/integration/repositories.test.ts`
-- [ ] T017 [P] [US1] Write failing application integration tests for happy path, payment failure, full class, missing resources, and invalid terminal transitions in `tests/integration/booking-service.test.ts`
+- [X] T016 [P] [US1] Write failing repository integration tests for class availability, booking persistence, and payment audit fields in `tests/integration/repositories.test.ts`
+- [X] T017 [P] [US1] Write failing application integration tests for happy path, payment failure, full class, missing resources, and invalid terminal transitions in `tests/integration/booking-service.test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T018 [US1] Define narrow transaction-scoped application ports in `src/application/ports.ts`
-- [ ] T019 [US1] Implement Drizzle/PostgreSQL repository adapters in `src/infrastructure/db/repositories.ts`
-- [ ] T020 [US1] Implement create booking and apply payment result use cases in `src/application/booking-service.ts`
-- [ ] T021 [P] [US1] Write failing HTTP contract tests for students, classes, booking creation, payment result, and booking status in `tests/contract/api.test.ts`
-- [ ] T022 [US1] Implement request IDs, response envelopes, validation, and error mapping in `src/lib/request-id.ts` and `src/lib/http.ts`
-- [ ] T023 [US1] Implement thin handlers in `src/app/api/students/route.ts`, `src/app/api/trial-classes/route.ts`, `src/app/api/bookings/route.ts`, `src/app/api/bookings/[bookingId]/route.ts`, and `src/app/api/bookings/[bookingId]/payment-result/route.ts`
+- [X] T018 [US1] Define narrow transaction-scoped application ports in `src/application/ports.ts`
+- [X] T019 [US1] Implement Drizzle/PostgreSQL repository adapters in `src/infrastructure/db/repositories.ts`
+- [X] T020 [US1] Implement create booking and apply payment result use cases in `src/application/booking-service.ts`
+- [X] T021 [P] [US1] Write failing HTTP contract tests for students, classes, booking creation, payment result, and booking status in `tests/contract/api.test.ts`
+- [X] T022 [US1] Implement request IDs, response envelopes, validation, and error mapping in `src/lib/request-id.ts` and `src/lib/http.ts`
+- [X] T023 [US1] Implement thin handlers in `src/app/api/students/route.ts`, `src/app/api/trial-classes/route.ts`, `src/app/api/bookings/route.ts`, `src/app/api/bookings/[bookingId]/route.ts`, and `src/app/api/bookings/[bookingId]/payment-result/route.ts`
 
 **Checkpoint**: US1 contract and integration tests pass independently.
 

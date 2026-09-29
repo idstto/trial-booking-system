@@ -10,6 +10,7 @@ export default defineConfig({
   test: {
     environment: "node",
     globals: true,
+    fileParallelism: false,
     setupFiles: ["./tests/setup.ts"],
     sequence: { concurrent: false },
     testTimeout: 15_000,
